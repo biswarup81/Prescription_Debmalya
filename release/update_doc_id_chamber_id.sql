@@ -1,0 +1,25 @@
+update 	allergy_master	set doc_id='dsanyal' and chamber_id='anandaclinic'	;
+update 	clinical_impression	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+			
+update 	dose_details_master	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	dose_direction	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	dose_timing_master	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	investigation_master	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	lmp	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	medicine_master	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	past_medical_history_master	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	patient	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	patient_health_details	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	patient_health_details_by_receptionist	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	patient_health_details_master	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	patient_investigation	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	precribed_medicine	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	prescribed_allergy	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	prescribed_cf	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	prescribed_investigation	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	prescribed_past_med_history	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	prescribed_social_history	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	prescription	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	reception_master	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	social_history_master	set doc_id='dsanyal' , chamber_id='anandaclinic'	;
+update 	visit	set doc_id='dsanyal' , chamber_id='anandaclinic'	;

@@ -1,0 +1,152 @@
+CREATE TABLE `chamber_master` (
+`chamber_id` INT NOT NULL AUTO_INCREMENT ,
+`chamber_name` VARCHAR( 200 ) NOT NULL ,
+`chamber_address` VARCHAR( 200 ) NOT NULL ,
+`chamber_header` TEXT NOT NULL ,
+PRIMARY KEY ( `chamber_id` )
+) ;
+
+ALTER TABLE	clinical_impression	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	dose_details_master	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	dose_direction	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	dose_timing_master	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	investigation_master	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	medicine_master	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	patient	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	patient_health_details	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	patient_health_details_by_receptionist	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	patient_health_details_master	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	patient_investigation	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	precribed_medicine	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	prescribed_cf	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	prescribed_investigation	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	prescription	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	user	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+ALTER TABLE	visit	ADD `chamber_id` INT NOT NULL DEFAULT '1';
+
+ALTER TABLE `user` ADD `user_full_name` VARCHAR( 200 ) NOT NULL AFTER `user_name` 
+
+ALTER TABLE `chamber_master` ADD `chamber_footer` TEXT NOT NULL AFTER `chamber_header` 
+
+CREATE TABLE `doctor_master` (
+`doctor_id` INT NOT NULL AUTO_INCREMENT ,
+`doctor_full_name` VARCHAR( 100 ) NOT NULL ,
+`doctor_address` VARCHAR( 400 ) NOT NULL ,
+`doctor_degree` VARCHAR( 400 ) NOT NULL ,
+`doctor_affiliation` VARCHAR( 400 ) NOT NULL ,
+`doctor_email` VARCHAR( 100 ) NOT NULL ,
+`doctor_mobile` INT NOT NULL ,
+`doctor_secondery_contact` INT NOT NULL ,
+`doc_reg_num` VARCHAR( 100 ) NOT NULL ,
+PRIMARY KEY ( `doctor_id` )
+) ;
+
+ALTER TABLE  `doctor_master` ADD FOREIGN KEY (  `user_name` ) REFERENCES  `myepresc_prescription`.`user` (
+`user_name`
+) ON DELETE RESTRICT ON UPDATE RESTRICT ;
+
+ALTER TABLE  `user` CHANGE  `label`  `role` VARCHAR( 20 )
+ALTER TABLE  `reception_master` CHANGE  `user_id`  `user_name` VARCHAR( 50 ) NOT NULL
+ALTER TABLE  `myepresc_prescription`.`chamber_master` ADD UNIQUE (
+`chamber_id` ,
+`related_doc_name` ,
+`related_rec_name`
+)
+
+ALTER TABLE  `patient_health_details_master` ADD UNIQUE (
+`NAME` ,
+`STATUS`
+);
+
+
+TRUNCATE `clinical_impression`;
+TRUNCATE `dose_details_master`;
+TRUNCATE `dose_direction`;
+TRUNCATE `dose_timing_master`;
+TRUNCATE `investigation_master`;
+TRUNCATE `medicine_master`;
+TRUNCATE `patient`;
+TRUNCATE `patient_health_details`;
+TRUNCATE `patient_health_details_master`;
+TRUNCATE `patient_investigation`;
+TRUNCATE `precribed_medicine`;
+TRUNCATE `prescribed_cf`;
+TRUNCATE `prescribed_investigation`;
+TRUNCATE `prescription`;
+TRUNCATE `visit`;
+
+insert into myepresc_prescription.clinical_impression(ID, TYPE,DESCRIPTION,chamber_id, doc_id) 
+select ID,TYPE,DESCRIPTION,chamber_id, doc_id from myepresc_sroy.clinical_impression;
+
+
+insert into myepresc_prescription.dose_details_master(DOSE_DETAILS_MASTER_ID, DOSE_DETAILS,chamber_id, doc_id) 
+select DOSE_DETAILS_MASTER_ID, DOSE_DETAILS,chamber_id, doc_id from myepresc_sroy.dose_details_master;
+
+insert into myepresc_prescription.dose_direction( 	DOSE_DIRECTION_ID, DIRECTION	,chamber_id, doc_id) 
+select  	DOSE_DIRECTION_ID,DIRECTION	,chamber_id, doc_id from myepresc_sroy.dose_direction;
+
+dose_timing_master
+
+insert into myepresc_prescription.dose_timing_master(DOSE_TIMING_ID, TIMING	,chamber_id, doc_id) 
+select DOSE_TIMING_ID, TIMING	,chamber_id, doc_id from myepresc_sroy.dose_timing_master;
+
+insert into myepresc_prescription.investigation_master(ID, investigation_name,investigation_type,	unit,	STATUS	,chamber_id, doc_id) 
+select ID, investigation_name,investigation_type,	unit,	STATUS	,chamber_id, doc_id from myepresc_sroy.investigation_master;
+
+insert into myepresc_prescription.medicine_master(MEDICINE_ID, MEDICINE_NAME,	MEDICINE_DIRECTION,	MEDICINE_ENTRY_DATE_TIME,	MEDICINE_STATUS		,chamber_id, doc_id) 
+select MEDICINE_ID, MEDICINE_NAME,	MEDICINE_DIRECTION,	MEDICINE_ENTRY_DATE_TIME,	MEDICINE_STATUS	,chamber_id, doc_id from myepresc_sroy.medicine_master;
+
+
+insert into myepresc_prescription.patient(patient_id, GENDER,patient_first_name,patient_last_name,patient_name,patient_address,patient_city,patient_dob,age,patient_cell_num,patient_alt_cell_num,patient_email,data_entry_date	,chamber_id, doc_id) 
+select patient_id, GENDER,patient_first_name,patient_last_name,patient_name,patient_address,patient_city,patient_dob,age,patient_cell_num,patient_alt_cell_num,patient_email,data_entry_date	,chamber_id, doc_id from myepresc_sroy.patient;
+
+
+insert into myepresc_prescription.patient_health_details(ID, VALUE,	VISIT_ID) 
+select ID, VALUE,	VISIT_ID from doctors.patient_health_details;
+
+ALTER TABLE  `myepresc_prescription`.`patient_health_details` DROP INDEX  `ID` ,
+ADD UNIQUE  `ID` (  `ID` ,  `VISIT_ID` ,  `chamber_id` ,  `doc_id` );
+
+insert into myepresc_prescription.patient_health_details(ID, VALUE,	VISIT_ID,chamber_id, doc_id) 
+select ID, VALUE,	VISIT_ID,chamber_id, doc_id from myepresc_sroy.patient_health_details;
+
+ALTER TABLE  `myepresc_prescription`.`patient_health_details_master` DROP INDEX  `NAME` ,
+ADD UNIQUE  `NAME` (  `NAME` ,  `STATUS` ,  `chamber_id` ,  `doc_id` );
+
+insert into myepresc_prescription.patient_health_details_master(ID, 	NAME, 	STATUS, 	chamber_id, 	created_by_user_id, 	create_date,	doc_id) 
+select ID, 	NAME, 	STATUS, 	chamber_id, 	created_by_user_id, 	create_date,	doc_id from myepresc_sroy.patient_health_details_master;
+
+
+ALTER TABLE  `myepresc_prescription`.`patient_investigation` DROP INDEX  `patient_id` ,
+ADD UNIQUE  `patient_id` (  `patient_id` ,  `visit_id` ,  `investigation_id` ,  `chamber_id` ,  `doc_id` );
+
+insert into myepresc_prescription.patient_investigation(patient_id,	visit_id,	investigation_id,	value,chamber_id, doc_id) 
+select patient_id,	visit_id,	investigation_id,	value,chamber_id, doc_id from myepresc_sroy.patient_investigation;
+
+insert into myepresc_prescription.precribed_medicine(MEDICINE_ID,PRESCRIPTION_ID,	MEDICINE_NAME,	MEDICINE_DIRECTION,	MEDICINE_DOSE,	MEDICINE_TIMING,chamber_id, doc_id) 
+select MEDICINE_ID,PRESCRIPTION_ID,	MEDICINE_NAME,	MEDICINE_DIRECTION,	MEDICINE_DOSE,	MEDICINE_TIMING, chamber_id, doc_id from myepresc_sroy.precribed_medicine;
+
+insert into myepresc_prescription.prescribed_cf(clinical_impression_id,	prescription_id,chamber_id, doc_id) 
+select clinical_impression_id,	prescription_id,chamber_id, doc_id from myepresc_sroy.prescribed_cf;
+
+
+insert into myepresc_prescription.prescribed_investigation(PRESCRIBED_INVESTIGATION_ID, PRESCRIPTION_ID,INVESTIGATION_TYPE,	INVESTIGATION_DESCRIPTION,	INVESTIGATION_ID,chamber_id, doc_id) 
+select PRESCRIBED_INVESTIGATION_ID, PRESCRIPTION_ID,INVESTIGATION_TYPE,	INVESTIGATION_DESCRIPTION,	INVESTIGATION_ID, chamber_id, doc_id from myepresc_sroy.prescribed_investigation;
+
+
+ALTER TABLE  `prescription` CHANGE  `PRESCRIPTION_ID`  `PRESCRIPTION_ID` INT( 10 ) NOT NULL
+ALTER TABLE  `prescription` DROP PRIMARY KEY
+ALTER TABLE  `myepresc_prescription`.`prescription` ADD UNIQUE (
+`PRESCRIPTION_ID` ,
+`chamber_id` ,
+`doc_id`
+)
+
+insert into myepresc_prescription.prescription(PRESCRIPTION_ID ,VISIT_ID,	REFERRED_TO,	DIET,	NEXT_VISIT,	ANY_OTHER_DETAILS,	STATUS,	NEXT_VISIT_DAY,chamber_id, doc_id) 
+select PRESCRIPTION_ID,VISIT_ID,	REFERRED_TO,	DIET,	NEXT_VISIT,	ANY_OTHER_DETAILS,	STATUS,	NEXT_VISIT_DAY, chamber_id, doc_id from myepresc_sroy.prescription;
+
+insert into myepresc_prescription.visit(VISIT_ID , PATIENT_ID,	VISIT_DATE,	APPOINTMENT_TO_DOC_NAME,	VISITED,chamber_id, doc_id) 
+select VISIT_ID , PATIENT_ID,	VISIT_DATE,	APPOINTMENT_TO_DOC_NAME,	VISITED,chamber_id, doc_id from myepresc_sroy.visit;
+
+
+

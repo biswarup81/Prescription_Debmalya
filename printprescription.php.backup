@@ -1,0 +1,456 @@
+<?php include_once "./inc/datacon.php"; ?>
+<?php
+if(isset($_SESSION['user_type']) && isset($_SESSION['PRESCRIPTION_ID']) && isset($_SESSION['VISIT_ID']) && isset($_SESSION['chamber_name']) && isset($_SESSION['doc_name']) ){
+	$VISIT_ID = $_SESSION['VISIT_ID'];
+	$PRESCRIPTION_ID = $_SESSION['PRESCRIPTION_ID'];
+	$chamber_name = $_SESSION['chamber_name'];
+	$doc_name= $_SESSION['doc_name'];
+?>
+
+ 
+<?php include_once "./inc/header_print.php";
+include_once "classes/admin_class.php"; ?>
+<body >
+
+<?php
+    
+    if(isset($_POST['MAKE_PRESCIPTION'])){ 
+    
+    //$referred_to = $_POST['referred_to'];
+    $diet = $_POST['diet'];
+    
+    //$nextvist = date("Y-m-d", strtotime($_POST['nextvisit']));
+    $next_visit = "After ".$_POST['nextvisit']." Weeks";
+    //$comments = $_POST['comments'];
+    
+    $patient_id = $_POST['patient_id'];
+    $visit_id = $_POST['VISIT_ID'];
+    $other_comment = htmlspecialchars($_POST['other_comment']);
+   /*  $weight = 0;
+    $height = 0;
+    //update patient_health_details BMI Value
+    $result3 = mysql_query("select * from patient_health_details where ID IN('1','2') and VISIT_ID = '$VISIT_ID' AND chamber_id='$chamber_name' AND doc_id='$doc_name'");
+    while($rs5 = mysql_fetch_array($result3)){
+        if($rs5['ID'] == 1){
+            $height = $rs5['VALUE'];
+        } else if ($rs5['ID'] == 2){
+            $weight = $rs5['VALUE'];
+        } 
+    }
+    
+    if($weight != 0 && $height != 0){
+        $update= new admin(); 
+        $bmi = $update->calcBMI($weight, $height);
+
+        $udateQueryforph = "insert into patient_health_details (ID, VALUE,VISIT_ID, chamber_id, doc_id) 
+        values ('3','$bmi','$VISIT_ID', '$chamber_name', '$doc_name')";
+
+        mysql_query($udateQueryforph);
+    } */
+    $oth_comnt = mysql_real_escape_string($other_comment);
+    mysql_query("update prescription set VISIT_ID = '$VISIT_ID',DIET = '$diet', NEXT_VISIT = '$next_visit', 
+    		STATUS ='SAVE', ANY_OTHER_DETAILS='$oth_comnt' where PRESCRIPTION_ID = '$PRESCRIPTION_ID' and STATUS='DRAFT'") or die(mysql_error());
+    
+   
+    if (isset($_POST['inv'])) {
+    
+        $inv = $_POST['inv'];
+        //$temp = implode(',',$inv);
+        //echo "Checked Values" . $temp ;
+        if (!empty($inv)) {
+
+            $invarray = array_map('mysql_real_escape_string',$inv);
+            //echo "Checked Values" . $invarray ;
+            foreach ($invarray as $value) {
+                    // Act on $value
+                    //insert into prescribed_INVESTIGATION
+                //echo "VALUE -> ".$value;
+                    mysql_query("INSERT INTO prescribed_investigation (PRESCRIPTION_ID,INVESTIGATION_ID,chamber_id, doc_id) 
+                            values ('".$PRESCRIPTION_ID."','".$value."','$chamber_name','$doc_name')");
+            }
+        }
+    }
+    /*if (isset($_POST['cf'])) {
+        $cf = $_POST['cf'];
+        if (!empty($cf)) {
+            $cfarray = array_map('mysql_real_escape_string',$cf);
+                foreach ($cfarray as $value) {
+                    // Act on $value
+                    //insert into prescribed_INVESTIGATION
+                //echo "VALUE -> ".$value;
+                    mysql_query("INSERT INTO prescribed_cf (clinical_impression_id,prescription_id) 
+                            values ('".$value."','".$PRESCRIPTION_ID."')");
+            }
+        }
+    }*/
+        $query = "update visit set VISITED = 'yes' where VISIT_ID = '$VISIT_ID' AND chamber_id='$chamber_name' AND doc_id='$doc_name'";
+        //$query = "update visit a set a.VISITED = 'yes' where a.PATIENT_ID = 
+          //          (select b.PATIENT_ID  from prescription b where b.prescription_id = '$PRESCRIPTION_ID')";
+        mysql_query($query) or die(mysql_error());
+        
+        $query = "select * from visit where VISIT_ID = '$VISIT_ID' AND chamber_id='$chamber_name' AND doc_id='$doc_name'";
+        $result = mysql_query($query) or die(mysql_error());
+        
+        while($row = mysql_fetch_array($result)){
+            mysql_query("update visit set VISITED = 'yes' where patient_id = '".$row['PATIENT_ID']."' AND chamber_id='$chamber_name' AND doc_id='$doc_name'") or die(mysql_error());
+        }
+        
+        //echo "<div class='b_success'>PRESCRIPTION created successfully<br><h2><a href='visit_list.php'>OK</a></h2></div>";
+        //echo "<div class='b_success'>PRESCRIPTION created successfully<br><h2><a href='print.php?patient_id=$_GET[patient_id]&prescription_id=$PRESCRIPTION_ID&visit_id=$VISIT_ID'>OK</a></h2></div>";
+    } else { 
+    	$admin= new admin(); 
+    	$patient_id = $admin->getPatientDetailsFromVisit($VISIT_ID, $chamber_id,$doc_name)->patient_id;
+    	echo "<script>location.href='http://localhost/prescription/archievedprescription.php?PRESCRIPTION_ID=$PRESCRIPTION_ID&visit_id=$VISIT_ID&patient_id=$patient_id'</script>";
+    	
+    	echo "<script>location.href='/visit_list.php'</script>";
+    }
+?>
+<!--BEGIN wrapper-->
+<div align="center"><a href="logout.php">Logoff</a></div>
+
+        
+            
+            <div class="container" id="printArea">
+        
+           <!--BEGIN header-->
+            <?php 
+            
+            
+            include_once 'classes/prescription_header.php';
+	            $update= new admin();
+	            
+	            $d1 = $update->getPatientInformationforArchievePrescription($PRESCRIPTION_ID, $chamber_id,$doc_name);
+	           
+	            $chamber_id = $_SESSION['chamber_name'];
+	            
+	            $admin_obj = new admin();
+	            
+	            $obj = $admin_obj->getChamberDetails($chamber_id);
+	            
+	            $chamber_id = $_SESSION['chamber_name'];
+	            $doc_name = $_SESSION['doc_name'];
+	            $header = new Header($doc_name,$chamber_id);
+	            
+            ?>
+            
+            
+            <!--BEGIN header-->
+    <div id="header">
+    
+    	<!--BEGIN logo-->
+        <div id="logo">        
+        	<div class="black">
+            <img src="images/logo.png" style="padding-bottom:8px; " /><br/>
+            MBBS (Hons), DTM&amp;H, MD (Medicine), DM (Endocrinology), MRCP<br/>
+            Fellow, American College of Endocrinology (FACE)<br/>
+            Professor of Endocrinology, KPC Medical College<br/>
+            Consultant Endocrinologist & Diabetologist</div>
+            <div class="gray"><b>Member</b>: Endocrine Society (<b>USA</b>), AACE (<b>USA</b>)<br/>
+           
+            </div>        
+        </div>
+        <!--END of logo-->
+        
+        <!--BEGIN info-->
+   		 <div id="info">
+        	<div>
+            <img src="images/phone.png" align="absmiddle"/>&nbsp;&nbsp;&nbsp;<b>+91.9830118388 (M)</b><br/>
+            <img src="images/email.png" align="absmiddle"/>&nbsp;&nbsp;&nbsp;<b>dr_debmalya@hotmail.com</b><br/>
+            <b>Ananda Clinic (By Appointment)</b><br/>
+            567, Diamond Harbour Road, Kolkata - 34<br/>
+            Phone : 23991153 / 24071765<br/><br/>
+            <b>Residence (By Appointment)</b><br/>
+            36, Block H, New Alipore, Kolkata - 53
+            </div>
+        
+        </div>
+        <!--END of info-->
+    
+    
+    </div>
+    <!--END of header--> 
+          <!-- Begin Patient Details -->
+          <div class="inner_name" >
+                        
+                        #  <?php echo $d1->patient_id; ?>, <?php if($d1->patient_name == null || $d1->patient_name == ""){
+                            echo $d1->patient_first_name." ".$d1->patient_last_name; } else { echo $d1->patient_name ; }?>, <?php echo $d1->GENDER ?>, <?php 
+                        
+                        if($d1->age == 0){
+                            print $update->calcAge1($d1->patient_dob, $d1->VISIT_DATE) ;
+                        }else {
+                            echo $d1->age;
+                        } ?>
+					(<?php echo $d1->patient_address . ", " . $d1->patient_city; ?>, Ph: <?php echo $d1->patient_cell_num; ?>)
+          </div>
+            
+           <!-- End Patient Details -->
+            
+           
+           
+            <!--BEGIN content-->
+            <div class="row">
+            
+                <!--BEGIN block one-->
+                <div class="block" > 
+                    <div class="headings"><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;Clinical Impressions</div>
+                    <div class="inner" >
+                        <table>
+                        <?php
+                            $q15 = "SELECT b.type
+                                    FROM prescribed_cf a, clinical_impression b
+                                    WHERE a.clinical_impression_id = b.id
+                                    AND a.prescription_id = '".$_POST['PRESCRIPTION_ID']."'";
+                            $rsd1 = mysql_query($q15)  or die(mysql_error()); 
+                            while($rs = mysql_fetch_array($rsd1) ) {
+                                $result = $rs['type'];
+                                
+                                echo "<tr><td>$result</td></tr>" ;
+                                
+                            }
+                        ?>
+                        </table>
+                    </div>        
+                </div>
+                
+                <!--BEGIN block two-->
+                <div class="block" >
+                    <div class="headings"><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;Investigation Done</div>
+                    <div class="inner">
+                        <table>
+                            
+                        <?php
+    $result = mysql_query("SELECT b.investigation_name, a.value, b.unit
+                            FROM patient_investigation a, investigation_master b
+                            WHERE a.patient_id = '$patient_id'
+                            AND a.visit_id = '$visit_id'
+                            AND a.investigation_id = b.ID ");
+   
+    while($rows = mysql_fetch_array($result) ){
+    
+?>
+                           
+                      <tr>
+                        <td ><?php echo $rows['investigation_name']; ?></td>
+                        <td ><?php echo $rows['value']; ?></td>
+                        <td ><?php echo $rows['unit']; ?></td>
+                        
+                      </tr>
+                          
+                       
+                        <?php } ?>
+                          
+                        </table>
+                    </div>   
+                
+                </div>
+                <!--END of block two-->
+                
+                <!--BEGIN block three-->
+                <div class="block">
+                    <div class="headings"><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;C/F </div>
+                    <div class="inner">
+                        
+                    <!-- Get In Touch Starts -->
+                    <table>
+            <tr><td id="CF" width="100%">
+
+                    <?php
+                            $q15 = "select a.VALUE, b.NAME, a.ID from
+                                patient_health_details a , patient_health_details_master b
+                                where
+                                a.ID = b.ID
+                                and a.VISIT_ID = '$visit_id'";
+                            $rsd1 = mysql_query($q15);
+
+                            while($rs = mysql_fetch_array($rsd1)) {
+                                    $name = $rs['NAME'];
+                                    $value = $rs['VALUE'];
+                                    $id = $rs['ID'];
+                    ?>
+                    <table>      
+                            <tr>
+                                    <td width="100%" ><?php echo $name; ?></td>
+                                    <td width="100%" ><?php echo $value; ?></td>
+                                    
+                            </tr> 
+                    </table> 
+            <?php    } ?>
+            </td>
+            </tr>
+            
+    </table>
+                <!-- Get In Touch Ends -->					
+                </div>
+           
+                
+              </div>
+              <!--END of block three-->
+              
+              
+              
+              
+            
+            </div>
+            <!--END of content-->
+            <!--BEGIN rx section-->
+            
+            <div class="invest_rx">    
+                <div class="headings" ><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;Rx (Prescription)</div>
+                <div class="col-xs-12 .col-sm-6 .col-lg-8">        
+                
+                    <?php
+                        $q11 = "SELECT * FROM precribed_medicine WHERE PRESCRIPTION_ID = '".$_POST['PRESCRIPTION_ID']."'";
+                            //echo $q5;
+                
+                            $result = mysql_query($q11) or die(mysql_error()); 
+                    ?>
+                    
+                    <table class="table table-striped" >
+                          
+                         <thead>
+				              <tr>
+				                <th>#</th>
+				                <th>Medicine's Names</th>
+				                
+				                <th>Direction</th>
+				                
+				              </tr>
+				            </thead>
+				            <tbody>
+                            <?php $count=1;
+                            while($rs = mysql_fetch_array($result)) { ?>
+                          <tr>
+                          <td><?php echo $count; ?></td>
+                            <td><img src="images/stock_list_bullet.png"/>&nbsp<strong><?php echo $rs['MEDICINE_NAME'] ?></strong>
+                            </td>
+                           <td> <i><?php echo $rs['MEDICINE_DOSE'] ?></i></td>
+                                                 
+                            
+                          </tr>
+                            <?php $count = $count+1; } ?>
+                        </table> 
+                    
+                </div>
+            
+            </div>
+            <!--END of rx section-->
+             <!--BEGIN doctor comment section-->
+            <div class="diet">    
+                <div class="headings"><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;Comment / Advice</div>
+                <div class="invest_inner">        
+                <?php echo $other_comment; ?>
+                </div>
+            
+            </div>
+            <!--END doctor comment section-->
+            
+            <!--BEGIN diet section-->
+            <?php 
+                
+            $query = "select * from prescription where PRESCRIPTION_ID = 
+                        '".$PRESCRIPTION_ID."' and VISIT_ID = '".$VISIT_ID."'";
+            $result = mysql_query($query);
+            $diet1 = "";
+            $nextvisit1 = "";
+            while($rs = mysql_fetch_array($result)){
+                $diet1 = $rs['DIET'];
+                $nextvisit1 = $rs['NEXT_VISIT'];
+                $other_comment = $rs['ANY_OTHER_DETAILS'];
+            }
+            ?>
+            <div class="diet">    
+                <div class="headings"><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;Diet & Lifestyle Recommendation</div>
+                <div class="invest_inner">        
+                <?php echo $diet1; ?>
+                </div>
+            
+            </div>
+            
+            <!-- END Diet -->
+            
+            
+            
+            
+            
+            
+            <!--BEGIN special section-->
+            <div class="invest" style="margin-top: 20px;">    
+                <div class="headings"><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;Prescribed Investigation</div>
+                <div class="invest_inner">        
+                
+                    
+                            <div class="check_fields" >
+                                <?php
+                                $query = "SELECT b.investigation_name
+                                        FROM prescribed_investigation a, investigation_master b
+                                        WHERE a.investigation_id = b.ID
+                                        AND prescription_id = '".$_POST['PRESCRIPTION_ID']."'";
+                                $result = mysql_query($query);
+                                    while($rs = mysql_fetch_array($result)) {
+                                            $cname = $rs['investigation_name'];
+                                            //$inv_id =$rs['ID'];
+                                            echo $cname. ", ";
+                                    }
+                                ?>
+                            </div>      
+                                       
+                          
+                </div>
+                
+                
+            
+            </div>
+            
+            
+            
+            <div class="diet" style="margin-top: 10px;">    
+                <div class="headings"><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;Patient's Next Visit</div>
+                <div class="invest_inner">    
+                    
+                <?php echo $nextvisit1; ?>
+                </div>
+            
+            </div>
+            
+            
+            <!--END of rx special-->
+            
+            <!--BEGIN submit button-->
+                <div class="btn_wrap">
+                    
+                    
+                    &nbsp;</div>
+            <!--END of submit button-->
+                      
+            <!--BEGIN footer-->
+            
+          
+	
+<div class="row2">
+        <div class="col-md-8-print"> Patient's Next Visit : <?php echo $nextvisit1; ?></div>
+        <div class="col-md-4-print" align="right"><b>(<?php echo $header->doctor_full_name;; ?>) </b><br>Reg. No. # <?php echo $header->doc_reg_num;?></div>
+</div>	
+<div class="row">
+      
+      <div class="alert alert-info" role="alert">
+        <strong><?php echo $header->chamber_footer;?></strong>
+      </div>
+      
+     
+</div><!--END of footer-->
+        </div><!-- End container -->
+            <div class="content" align="center">
+        
+		        <a class="btn btn-success" href="visit_list.php" id="print_arch_pres"onclick="return func_print('<?php echo $header->doctor_full_name;?>');">Print</a>
+			</div>
+            
+<?php 
+}  else {
+echo "Please logout and login again.";
+}?> 
+            
+        	 
+
+        <?php include_once './inc/footer.php';?>
+    </body>
+</html>

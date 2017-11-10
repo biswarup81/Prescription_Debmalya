@@ -1,0 +1,242 @@
+@font-face 
+{
+	font-family: palasmbdimport;
+	src:url('./fonts/palasmbd.ttf');
+}
+
+.col-md-8-print {
+	    width: 66.66666667%;
+	    float:left;
+	    font-family: Arial, Helvetica, sans-serif;
+	    color: #333;
+	    font-size: 14px;
+	}
+	
+.col-md-4-print {
+	    width: 33.33333333%;
+	    float:left;
+	    font-family: Arial, Helvetica, sans-serif;
+	    color: #333;
+	    font-size: 14px;
+	    padding-top: 13px;
+	    text-align: right;
+	}
+.col-reg-num {
+	    width: 33.33333333%;
+	    float:left;
+	    font-family: Arial, Helvetica, sans-serif;
+	    color: #333;
+	    font-size: 14px;
+	    
+	    text-align: right;
+	}
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    border: 1px solid #ebd8d8;
+    width: 980px;
+    min-height: 980px;
+}
+.print_container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    border: 1px solid #ebd8d8;
+    width: 980px;
+    min-height: 980px;
+}
+.row {
+    padding-bottom: 10px;
+    padding-top: 5px;
+	background:#fff;
+}
+.row2{
+   
+    padding-bottom: 45px;
+    padding-top: 10px;
+    border-bottom:1px solid #eaeaea;
+	background:#fff;
+}
+
+.inner_name{
+	width=100%
+	float: left;
+    min-height: 13px;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    text-align: left;
+    /* color: #333; */
+    /* font-size: 13px; */
+    padding-top: 8px;
+    padding-bottom: 5px;
+    padding-left: 7px;
+    /* border-bottom: 1px dotted #bebebe; */
+}
+
+#prescription_doc_name{
+    font-family: palasmbdimport;
+    color: #333;
+    font-size: 58px;
+    /* font-weight: bold; */
+    padding-bottom: 5px;
+}	
+
+.content{
+	float: left;
+    width: 100%;
+    height: auto;
+    /* border-bottom: 1px dotted #bebebe; */
+    background: #fff;
+    /* padding: 10px 20px 20px 20px; */
+    padding-bottom: 8px;	
+}
+
+.content_patient_details{
+	float: left;
+    width: 100%;
+    height: auto;
+    /* border-bottom: 1px dotted #bebebe; */
+    background: #fff;
+    /* padding: 10px 20px 20px 20px; */
+    padding-bottom: 8px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    margin-top: 7px; 
+    margin-bottom: 5px;
+    background-color: #e5eff1;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    font-size: 16px;
+}
+
+
+.medicine_desc{
+	font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    font-size: 20px;
+}
+.block{
+	float:left;
+	width:31.3%;
+	height:auto;
+	background:#fff;
+}
+
+.inner{
+	float:left;
+	width: 95%;
+	min-height:100px;
+	border: 1px solid rgba(11, 10, 10, 1);
+	padding:5px;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#333;
+	font-size:14px;
+}
+.headings{
+	    /* float: left; */
+    /* width: 305px; */
+    /* height: 18px; */
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}	
+.rx{
+	float:left;
+	width:100%;
+	height:auto;
+	border-bottom:1px dotted #bebebe;
+	background:#fff;
+	padding:10px 20px 10px 20px;	
+}
+.diet{
+	    float: left;
+    /* width: 940px; */
+     width: 100%;
+    height: auto;
+    border-bottom: 1px dotted #bebebe;
+    background: #fff;
+    /* padding: 10px 20px 10px 20px; */
+    padding-top: 21px;	
+    padding-bottom: 10px;
+    
+}
+.invest{
+	float:left;
+	width: 100%;
+	height:auto;
+	border-bottom:1px solid #eaeaea;
+	background:#fff;
+	padding-top: 10px;	
+    padding-bottom: 10px;
+}
+
+.invest_rx{
+	float: left;
+    width: 100%;
+    height: auto;
+    border: 1px solid #eaeaea;
+    background: #fff;
+    padding-top: 11px;
+    padding-bottom: 10px;
+    min-height: 225px;
+    margin-top: 15px;
+    background-color: #e5eff1;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btn_wrap{
+	clear:both;
+	margin:0 auto;
+	width:940px;
+	height:auto;
+	text-align:center;
+	padding-top:10px;
+}
+.alert {
+       padding: 5px;
+    /* margin-bottom: 20px; */
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.alert-info {
+    /*color: #31708f; */
+    /*background-color: #d9edf7; */
+    /*border-color: #bce8f1;*/
+    font-size: 15px;
+    text-align: center;
+    border: 1px solid rgba(11, 10, 10, 1);
+    margin-top: 30px;
+}
+.invest_inner{
+	float:left;
+	width:940px;
+	height:auto;
+	background:#fff;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#555;
+	font-size:14px;
+	font-weight:normal;
+	padding-top:5px;
+	padding-left: 3px;
+}
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+.table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
