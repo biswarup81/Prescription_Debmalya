@@ -6,6 +6,7 @@ define("DB_NAME", "myepresc_prescription");
 
 
 
+
 $con = mysql_connect(HOST, USER, PASSWORD) or die(mysql_error());
 mysql_select_db(DB_NAME, $con) or die(mysql_error);
 
