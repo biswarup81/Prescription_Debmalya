@@ -2,7 +2,7 @@
 require_once "inc/config.php";
 $PRESCRIPTION_ID = $_GET['prescription_id'];
 $TYPE = $_GET['TYPE'];
-
+ 
 //GET ID of the TYPE
 
 $query = "select ID from clinical_impression where TYPE = '$TYPE'";
