@@ -163,7 +163,7 @@ include_once "classes/admin_class.php";
                                              
                                     
                                             </div>
-                                            <input type="button" value="Search" name="search" class="btn btn-default" onclick="searchInvestigation();" >
+                                            <input type="button" value="Search" name="search" class="btn btn-default" onclick="searchInvestigationforPatient();" >
                                             <!--END of search-->
 
                                             <!--BEGIN search results-->

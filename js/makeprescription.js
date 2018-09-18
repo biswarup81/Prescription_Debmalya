@@ -559,8 +559,12 @@ $(document).ready(function(){
 	  	  
 	  	  var dose4 = document.getElementById("dose4").value;
 	  	  var dose4dir = getCheckedRadio("bdradio");
-	  	  
-	  	var duration = document.getElementById("duration_count").value + " "+document.getElementById("duration_type").value
+	  	var duration = "";
+	  	if (document.getElementById("duration_count").value != "")  {
+	  		duration = "for "+document.getElementById("duration_count").value + " "+document.getElementById("duration_type").value
+	  	} else {
+	  		duration = "To Continue";
+	  	}
 	  	  var dosage = "";
 	  	  
 	  	  if(dose1dir != ""){
@@ -576,7 +580,7 @@ $(document).ready(function(){
 	  	      dosage = dosage +dose4+ " "+ dose4dir+" bedtime. ";
 	  	  }
 	  	  if(dosage != ""){
-	  		  dosage = dosage + "for "+duration;
+	  		  dosage = dosage + duration;
 	  	  }
 	  	  alert(dosage);
 	  	  var patient_id = document.getElementById("patient_id").value;
@@ -1274,7 +1278,7 @@ function searchReportByMedicine(){
 
 }
 
-function searchInvestigation(){
+function searchInvestigationforPatient(){
     //alert(document.getElementById("s_p_id").value);
     //alert(document.getElementById("patient_id").value);
     if(document.getElementById("invest_name").value == ""){
@@ -1295,6 +1299,8 @@ function searchInvestigation(){
 		
     	$('#report_by_patient_inv').DataTable( {
 			"ajax": url,
+			paging: false,
+		    searching: false,
 			dom: 'Bfrtip',
 	        buttons: [
 	            'copy', 'csv', 'excel', 'pdf', 'print'

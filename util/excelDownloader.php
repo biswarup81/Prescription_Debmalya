@@ -48,7 +48,7 @@ function setDownloadAsHeader($filename) {
     header('Content-disposition: attachment; filename=' . $filename);
     return true;
 }
-require_once "../inc/config.php";
+require_once "../inc/datacon.php";
 $ci = $_GET["CI"];
 /*$mode = $_GET["MODE"];
 

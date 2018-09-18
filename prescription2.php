@@ -158,7 +158,7 @@ $d1 = $update->getPatientInformationForPrescription($patient_id, $chamber_name, 
             <!--BEGIN diet section-->
             <div class="diet" >    
                 <div class="headings"><!--<img src="images/Briefcase-Medical.png" />-->&nbsp;Diet & Lifestyle Recommendation</div>
-                <textarea class="form-control" name="diet" rows="3">Diet   Kcal/day, Cholesterol < 200 gm /day , Saturated Fat < 7%, Walking at recommended speed for atleast 30 mins/day, Alerted to hypoglycaemia (CBG < 70 mg/dl/SMBG)</textarea>       
+                <textarea class="form-control" name="diet" rows="3">Diet   Kcal/day, Cholesterol < 200 gm /day , Saturated Fat < 7%, Walking at recommended speed for atleast 30 mins/day, Alerted to hypoglycaemia (CBG < 70 mg/dl). Self Monitoring of Blood glucose.</textarea>       
                 
             </div>
             
